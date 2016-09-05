@@ -24,4 +24,4 @@ This simple module creates CRUD endpoints for some SQLAlchemy model.
         URLSpec(prefix(r'items'), ItemHandler, dict(psql=psql_pool), 'items'),
         URLSpec(prefix(r'items/(\d+)'), SingleItemHandler, dict(psql=psql_pool), 'single_item'),
     ])
-    ```
+```
