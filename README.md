@@ -1,6 +1,6 @@
 #Tornado + Alchemy REST Client
 
-This simple module creates CRUD endpoints for SQLAlchemy table. Its purpose to allow quickly create RESTful APIs, for example for admin panel. List endpoints support pagination and filtering
+This simple module creates CRUD endpoints for SQLAlchemy table. Its purpose to allow quickly create RESTful APIs, for example for admin panel. List endpoints support pagination and filtering. Was written for Angular's ng-admin, so this module supports ng-admin querying out of the box
 
 
 ##Usage example
@@ -77,9 +77,24 @@ To get all items, where `name` contains "test" and `type` is 5 and `value` is 7 
 
 ###Query params
 
-
 * _page – page name
 * _perPage – rows per page
 * _sortField – field to order by
 * _sortDir – direction to sort by
 * _filters – filter items with given params. Currently supported filters are: "" (equality), startswith, contains, icontains, any, ne
+
+###Join support
+
+That will return data from both tables at some time:
+
+```python
+class SingleItemHandler(SingleRESTAPIHandler):
+    table = TableItem
+
+    def get_from(self):
+        return self.table.join(TableUser, isouter=True)
+```
+
+##Requirements
+
+tornado, sqlalchemy
