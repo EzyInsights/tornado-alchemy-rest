@@ -21,7 +21,6 @@ This simple module creates CRUD endpoints for some SQLAlchemy model.
         table = ItemTable
 
     app = tornado.web.Application([
-        # acquisition triggering end points
         URLSpec(prefix(r'items'), ItemHandler, dict(psql=psql_pool), 'items'),
         URLSpec(prefix(r'items/(\d+)'), SingleItemHandler, dict(psql=psql_pool), 'single_item'),
     ])
