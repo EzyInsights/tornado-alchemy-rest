@@ -36,7 +36,8 @@ class SingleItemHandler(SingleRESTAPIHandler):
     def get_object_dict(self, *args):
         obj = yield super().get_object_dict(*args)
         
-        obj['user'] = yield self._execute_query(User.select().where(User.c.id == obj['user_id']))
+        cursor = yield self._execute_query(User.select().where(User.c.id == obj['user_id']))
+        obj['user'] = cursor.fetchone()
         return obj
 
     @gen.coroutine
@@ -44,4 +45,22 @@ class SingleItemHandler(SingleRESTAPIHandler):
         assert params['value'] > 5
         yield super().put_object_dict(id, params)
 
+class ItemHandler(ListRESTAPIHandler):
+    table = TableItem
+
+    @gen.coroutine
+    def get_object_list(self, query):
+        objects = yield super().get_object_list(query)
+        for obj in objects:
+            cursor = yield self._execute_query(User.select().where(User.c.id == obj['user_id']))
+            obj['user'] = cursor.fetchone()
+        raise gen.Return(objects)
+
+    @gen.coroutine
+    def post_object_dict(self, params):
+        assert params['value'] > 5
+        yield super().post_object_dict(params)
+
 ```
+
+
