@@ -1,8 +1,10 @@
-##Tornado + Alchemy REST Client
+#Tornado + Alchemy REST Client
 
-This simple module creates CRUD endpoints for some SQLAlchemy model.
+This simple module creates CRUD endpoints for SQLAlchemy table. Its purpose to allow quickly create RESTful APIs, for example for admin panel. List endpoints support pagination and filtering
 
-####Usage example
+
+##Usage example
+
 
 ```python
     import tornado.web
@@ -63,4 +65,21 @@ class ItemHandler(ListRESTAPIHandler):
 
 ```
 
+##Querying
 
+To get second page with ordering by id DESC you need to do that query:
+
+    GET /item?_page=2&_perPage=30&_sortField=id&_sortDir=DESC
+    
+To get all items, where `name` contains "test" and `type` is 5 and `value` is 7 or 6, you will need that query:
+
+    GET /item?_filters={"name__contains":"test", "type":5, "value__any":[7,6]}
+
+###Query params
+
+
+* _page – page name
+* _perPage – rows per page
+* _sortField – field to order by
+* _sortDir – direction to sort by
+* _filters – filter items with given params. Currently supported filters are: "" (equality), startswith, contains, icontains, any, ne
