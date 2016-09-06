@@ -7,6 +7,13 @@ panel. List endpoints support pagination and filtering. Was written for
 Angular’s ng-admin, so this module supports ng-admin querying out of the
 box
 
+Installation
+------------
+
+::
+
+        pip install tornado-alchemy-rest
+
 Usage example
 -------------
 
