@@ -50,8 +50,9 @@ class BaseAPIHandler(tornado.web.RequestHandler):
     @gen.coroutine
     def _execute_bulk_queries(self, alchemy_queries):
         queries = list()
-        for query in alchemy_queries:
-            queries.append((str(query.compile(dialect=postgresql.dialect())), query.params))
+        for alchemy_query in alchemy_queries:
+            query = alchemy_query.compile(dialect=postgresql.dialect())
+            queries.append((str(query), query.params))
         cursor = yield self.psql.transaction(queries)
         raise gen.Return(cursor)
 
