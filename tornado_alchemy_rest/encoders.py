@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 from datetime import datetime, timedelta
 from json import JSONEncoder, JSONDecoder
+from aiopg.sa.result import RowProxy
 
 class TimeDeltaJSONEncoder(JSONEncoder):
     """
@@ -31,6 +32,10 @@ class DateTimeAwareJSONEncoder(JSONEncoder):
     """
 
     def default(self, obj):
+        if isinstance(obj, RowProxy):
+            return {
+                k: obj[k] for k in obj.keys()
+            }
         if isinstance(obj, datetime):
             return {
                 '__type__': 'datetime',
