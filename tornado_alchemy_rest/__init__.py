@@ -44,6 +44,10 @@ class BaseAPIHandler(tornado.web.RequestHandler):
             self.json_args = None
         return super().prepare()
 
+    async def on_finish(self):
+        self.psql.close()
+        return super().on_finish()
+
 
     async def _execute_query(self, alchemy_query):
         cursor = await self.psql.execute(alchemy_query)
