@@ -49,14 +49,15 @@ class BaseAPIHandler(tornado.web.RequestHandler):
         cursor = await self.psql.execute(alchemy_query)
         return cursor
 
-    @gen.coroutine
-    def _execute_bulk_queries(self, alchemy_queries):
-        queries = list()
-        for alchemy_query in alchemy_queries:
-            query = alchemy_query.compile(dialect=postgresql.dialect())
-            queries.append((str(query), query.params))
-        cursor = yield self.psql.transaction(queries)
-        raise gen.Return(cursor)
+    async def _execute_bulk_queries(self, alchemy_queries):
+        results = list()
+        async with self.psql.begin():
+            for alchemy_query in alchemy_queries:
+                query = alchemy_query.compile(dialect=postgresql.dialect())
+                cursor = await self.psql.execute(alchemy_query)
+                res = await cursor.fetchall()
+                results.append(res)
+        return results
 
 
 class SingleRESTAPIHandler(BaseAPIHandler):
