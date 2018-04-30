@@ -2,6 +2,7 @@ from __future__ import absolute_import
 
 import json
 from urllib.parse import urlencode
+import asyncio
 
 import tornado.web
 from tornado.web import MissingArgumentError
@@ -44,10 +45,9 @@ class BaseAPIHandler(tornado.web.RequestHandler):
             self.json_args = None
         return super().prepare()
 
-    async def on_finish(self):
-        self.psql.close()
+    def on_finish(self):
+        asyncio.ensure_future(self.psql.close())
         return super().on_finish()
-
 
     async def _execute_query(self, alchemy_query):
         cursor = await self.psql.execute(alchemy_query)
