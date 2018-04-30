@@ -33,7 +33,7 @@ class DateTimeAwareJSONEncoder(JSONEncoder):
     """
 
     def default(self, obj):
-        if isinstance(obj, enum.IntEnum):
+        if isinstance(obj, enum.IntEnum) or isinstance(obj, enum.Enum):
             return obj.value
         if isinstance(obj, RowProxy):
             return {
