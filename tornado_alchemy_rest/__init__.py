@@ -113,7 +113,7 @@ class SingleRESTAPIHandler(BaseAPIHandler):
         if row is None:
             self.set_status(404)
             return
-        yield self.psql.execute(self.table.delete().where(self.table.c.id == row["id"]))
+        await self.psql.execute(self.table.delete().where(self.table.c.id == row["id"]))
         self.set_status(204)
 
 
