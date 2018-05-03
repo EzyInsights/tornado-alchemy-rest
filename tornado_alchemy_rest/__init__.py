@@ -107,15 +107,13 @@ class SingleRESTAPIHandler(BaseAPIHandler):
         await self.put_object_dict(row["id"], self.json_args)
         await self.get(*args)
 
-    @gen.coroutine
-    def delete(self, *args):
-        cursor = yield self._execute_query(self.get_query(*args))
-        row = cursor.fetchone()
+    async def delete(self, *args):
+        cursor = await self._execute_query(self.get_query(*args))
+        row = await cursor.fetchone()
         if row is None:
             self.set_status(404)
             return
-        delete_query = self.table.delete().where(self.table.c.id == row["id"]).compile(dialect=postgresql.dialect())
-        yield self.psql.execute(str(delete_query), delete_query.params)
+        yield self.psql.execute(self.table.delete().where(self.table.c.id == row["id"]))
         self.set_status(204)
 
 
