@@ -74,8 +74,8 @@ class SingleRESTAPIHandler(BaseAPIHandler):
         return self.get_from().select().where(self.table.c.id == id)
 
     async def get_object_dict(self, *args):
-        query = self.get_query(*args).compile(dialect=postgresql.dialect())
-        cursor = await self.psql.execute(str(query), query.params)
+        query = self.get_query(*args)
+        cursor = await self.psql.execute(query)
         row = await cursor.fetchone()
         return dict(row)
 

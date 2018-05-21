@@ -40,16 +40,7 @@ class DateTimeAwareJSONEncoder(JSONEncoder):
                 k: obj[k] for k in obj.keys()
             }
         if isinstance(obj, datetime):
-            return {
-                '__type__': 'datetime',
-                'year': obj.year,
-                'month': obj.month,
-                'day': obj.day,
-                'hour': obj.hour,
-                'minute': obj.minute,
-                'second': obj.second,
-                'microsecond': obj.microsecond,
-                }
+            return obj.timestamp()
 
         elif isinstance(obj, timedelta):
             return {
