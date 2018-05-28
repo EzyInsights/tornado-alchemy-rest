@@ -77,7 +77,10 @@ class SingleRESTAPIHandler(BaseAPIHandler):
         query = self.get_query(*args)
         cursor = await self.psql.execute(query)
         row = await cursor.fetchone()
-        return dict(row)
+        if row is None:
+            return None
+        else:
+            return dict(row)
 
     @gen.coroutine
     def get(self, *args):
