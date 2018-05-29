@@ -78,16 +78,13 @@ class SingleRESTAPIHandler(BaseAPIHandler):
         cursor = await self.psql.execute(query)
         row = await cursor.fetchone()
         if row is None:
-            return None
+            raise tornado.web.HTTPError(404)
         else:
             return dict(row)
 
     @gen.coroutine
     def get(self, *args):
         row = yield self.get_object_dict(*args)
-        if row is None:
-            self.set_status(404)
-            return
         self.write(json.dumps(row, cls=DateTimeAwareJSONEncoder))
         self.set_status(200)
 
