@@ -133,18 +133,26 @@ class ListRESTAPIHandler(BaseAPIHandler):
     def get_query(self, **filters):
         query = self.get_from().select()
         for k, v in filters.items():
-            field, _, filter_ = k.partition('__')
-            if not filter_:
+            field, _, condition = k.partition('__')
+            if not condition:
                 query = query.where(column(field) == v)
-            elif filter_ == 'startswith':
+            elif condition == 'gt':
+                query = query.where(getattr(self.table.c, field) > v)
+            elif condition == 'lt':
+                query = query.where(getattr(self.table.c, field) < v)
+            elif condition == 'ge':
+                query = query.where(getattr(self.table.c, field) >= v)
+            elif condition == 'le':
+                query = query.where(getattr(self.table.c, field) <= v)
+            elif condition == 'startswith':
                 query = query.where(getattr(self.table.c, field).startswith(v))
-            elif filter_ == 'contains':
+            elif condition == 'contains':
                 query = query.where(getattr(self.table.c, field).contains(v))
-            elif filter_ == 'icontains':
+            elif condition == 'icontains':
                 query = query.where(getattr(self.table.c, field).ilike('%' + v + '%'))
-            elif filter_ == 'any':
+            elif condition == 'any':
                 query = query.where(getattr(self.table.c, field).any(v))
-            elif filter_ == 'ne':
+            elif condition == 'ne':
                 query = query.where(getattr(self.table.c, field) != v)
         return query
 

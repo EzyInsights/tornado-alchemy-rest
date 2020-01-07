@@ -99,7 +99,7 @@ Query params
 -  \_sortField – field to order by
 -  \_sortDir – direction to sort by
 -  \_filters – filter items with given params. Currently supported
-   filters are: “” (equality), startswith, contains, icontains, any, ne
+   filters are: “” (equality), startswith, contains, icontains, any, ne, lt, gt, le, ge
 
 Join support
 ~~~~~~~~~~~~
